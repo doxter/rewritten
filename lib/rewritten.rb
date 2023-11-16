@@ -24,7 +24,7 @@ module Rewritten
     case server
     when String
       if server =~ /redis\:\/\//
-        redis = Redis.connect(url: server, thread_safe: true)
+        redis = Redis.new(url: server, thread_safe: true)
       else
         server, namespace = server.split('/', 2)
         host, port, db = server.split(':')
