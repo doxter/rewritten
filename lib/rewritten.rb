@@ -24,12 +24,11 @@ module Rewritten
     case server
     when String
       if server =~ /redis\:\/\//
-        redis = Redis.new(url: server, thread_safe: true)
+        redis = Redis.new(url: server)
       else
         server, namespace = server.split('/', 2)
         host, port, db = server.split(':')
-        redis = Redis.new(host: host, port: port,
-                          thread_safe: true, db: db)
+        redis = Redis.new(host: host, port: port, db: db)
       end
       namespace ||= :rewritten
 
@@ -148,7 +147,7 @@ module Rewritten
     Rewritten.redis.srem(:froms, from)
     Rewritten.redis.zrem("to:#{to}", from)
     Rewritten.redis.srem(:tos, to) if num_translations(to) == 0
- end
+  end
 
   def remove_all_translations(to)
     get_all_translations(to).each do |from|
@@ -237,7 +236,7 @@ module Rewritten
     elsif translate_partial && base_from.count('/') > 1
       parts = base_from.split('/')
       base_from(parts.slice(0, parts.size - 1).join('/'))
-        end
+    end
   end
 
   def appendix(some_from)
